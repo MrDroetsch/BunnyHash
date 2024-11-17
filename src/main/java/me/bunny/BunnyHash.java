@@ -6,16 +6,16 @@ import java.math.BigInteger;
 
 public class BunnyHash {
 
-    private Encoder encoder;
-    private BigInteger capacity;
-    private BigInteger multiplicator;
-    private BigInteger offset;
-    private BigInteger modInv;
+    private final Encoder encoder;
+    private final BigInteger capacity;
+    private final BigInteger multiplier;
+    private final BigInteger offset;
+    private final BigInteger modInv;
     private final BigInteger ZERO = new BigInteger("0");
     private final BigInteger ONE = new BigInteger("1");
 
-    public BunnyHash(String multiplicatorStr, Encoder encoder, String offsetStr) {
-        multiplicator = new BigInteger(multiplicatorStr);
+    public BunnyHash(String multiplierStr, Encoder encoder, String offsetStr) {
+        multiplier = new BigInteger(multiplierStr);
         offset = new BigInteger(offsetStr);
         capacity = encoder.getCapacity();
         if(offset.compareTo(capacity) >= 0) {
@@ -24,19 +24,19 @@ public class BunnyHash {
         if(offset.compareTo(ZERO) < 0) {
             throw new ArithmeticException("Offset can not be negative");
         }
-        if(multiplicator.compareTo(ONE) <= 0) {
+        if(multiplier.compareTo(ONE) <= 0) {
             throw new ArithmeticException("Multiplicator must be greater than 1");
         }
-        if(gcd(multiplicator, capacity).compareTo(ONE) != 0) {
+        if(gcd(multiplier, capacity).compareTo(ONE) != 0) {
             throw new ArithmeticException("Multiplicator must be coprime to capacity");
         }
 
         this.encoder = encoder;
-        modInv = multiplicator.modInverse(capacity);
+        modInv = multiplier.modInverse(capacity);
     }
 
-    public BunnyHash(String multiplicatorStr, Encoder encoder) {
-        this(multiplicatorStr, encoder, "0");
+    public BunnyHash(String multiplierStr, Encoder encoder) {
+        this(multiplierStr, encoder, "0");
     }
 
     private BigInteger gcd(BigInteger a, BigInteger b) {
@@ -56,7 +56,7 @@ public class BunnyHash {
         if(id.compareTo(capacity) >= 0) {
             throw new ArithmeticException("ID is too big for capacity");
         }
-        BigInteger hashInt = multiplicator.multiply(id).add(offset).mod(capacity);
+        BigInteger hashInt = multiplier.multiply(id).add(offset).mod(capacity);
         return encoder.intToBase(hashInt);
     }
 

@@ -10,6 +10,8 @@ public class Base26Encoder extends Encoder {
 
     @Override
     public BigInteger baseToInt(String baseStr) {
+        if(baseStr.length() != length)
+            throw new ArithmeticException("Length isn't fitting to decode");
         BigInteger result = new BigInteger("0");
         for (int i = 0; i < length; i++) {
             result = result.multiply(base);

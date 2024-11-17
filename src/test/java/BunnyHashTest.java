@@ -41,4 +41,10 @@ public class BunnyHashTest {
         assertThrows(ArithmeticException.class, () -> bunny.hash("-1"));
     }
 
+    @Test
+    @DisplayName("BunnyHash multiplier isn't coprime to capacity")
+    void BunnyHash_multiplier_coprime_capacity() {
+        assertThrows(ArithmeticException.class, () -> new BunnyHash("26", new Base26Encoder(6)));
+    }
+
 }
